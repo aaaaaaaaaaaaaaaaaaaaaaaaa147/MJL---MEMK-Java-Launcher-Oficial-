@@ -1,0 +1,8 @@
+Memk Java Launcher - Kit de personalização Android
+Adaptação baseada no Amethyst-Android, fork do PojavLauncher.
+Licença do núcleo: GNU LGPL-3.0 (consulte LICENSE no repositório da base).
+As alterações de código oferecidas neste pacote podem ser reutilizadas sob LGPL-3.0-or-later.
+Fontes: https://github.com/AngelAuraMC/Amethyst-Android
+        https://github.com/PojavLauncherTeam/PojavLauncher
+Minecraft é marca de seus respectivos titulares. MEMK não é afiliado a eles.
+Nenhuma credencial, jogo, código de ativação ou APK de terceiros vem neste pacote.
