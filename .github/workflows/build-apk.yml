@@ -27,6 +27,7 @@ jobs:
 
       - name: Baixar motor Pojav Amethyst
         run: |
+        git config --global url."https://github.com/".insteadOf "git@github.com:"
           git clone --recursive --branch v3_openjdk https://github.com/AngelAuraMC/Amethyst-Android.git source
           cd source
           git checkout 28d6e12d68121b7dd75f2e841058a6b7cdfe4a29
