@@ -1,1 +1,66 @@
 
+name: Construir MEMK Java APK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  apk:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 90
+
+    steps:
+      - name: Baixar arquivos MEMK
+        uses: actions/checkout@v4
+
+      - name: Preparar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Preparar Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.6.1'
+          validate-wrappers: false
+
+      - name: Baixar motor Pojav Amethyst
+        run: |
+          git clone --recursive --branch v3_openjdk https://github.com/AngelAuraMC/Amethyst-Android.git source
+          cd source
+          git checkout 28d6e12d68121b7dd75f2e841058a6b7cdfe4a29
+          git submodule update --init --recursive
+
+      - name: Personalizar launcher MEMK
+        run: python3 customize.py source
+
+      - name: Baixar Java Runtime
+        uses: dawidd6/action-download-artifact@v9
+        with:
+          workflow: build.yml
+          path: source/app_pojavlauncher/src/main/assets/components/jre
+          workflow_conclusion: completed
+          repo: AngelAuraMC/angelauramc-openjdk-build
+          branch: buildjre8
+          name: jre8-pojav
+
+      - name: Preparar idiomas
+        working-directory: source
+        run: bash ./scripts/languagelist_updater.sh
+
+      - name: Compilar APK
+        working-directory: source
+        run: gradle :app_pojavlauncher:assembleDebug --stacktrace
+
+      - name: Organizar APK
+        run: |
+          mkdir -p dist
+          cp source/app_pojavlauncher/build/outputs/apk/debug/*.apk dist/MemkJavaLauncher-debug.apk
+
+      - name: Disponibilizar APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: MemkJavaLauncher-Android
+          path: dist/*.apk
+          
